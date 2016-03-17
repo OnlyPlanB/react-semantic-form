@@ -1,16 +1,22 @@
 import React from 'react';
+import ValidationError from '../ValidationError';
 
 class TextInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.defaultValue
+      value: props.defaultValue || ""
     }
   }
 
   _onChange(e) {
+    // Setting the value here first and then performing setState
+    // since the connected Input calls getValue to retreive the value
+    // during the this.props.onChange method call and the this.state.value
+    // is not set during that period
+    this.state.value = e.target.value;
     this.setState({
-      value: e.target.value
+      value: this.state.value
     });
 
     if (this.props.onChange) {
@@ -19,29 +25,32 @@ class TextInput extends React.Component {
   }
 
   getValue() {
-    return this.state.value;
+    return new Promise(resolve => resolve(this.state.value));
   }
 
   validate(value) {
     const v = value.trim();
+    const { name, required, minLength, maxLength } = this.props;
 
-    if (this.props.required && v.length===0) {
-      throw "Value is required";
-    }
+    return new Promise((resolve, reject) => {
+      if (required && v.length===0) {
+        throw new ValidationError(name, "Value is required", this);
+      }
 
-    if (v.length === 0) {
-      return null;
-    }
+      if (v.length === 0) {
+        resolve();
+      }
 
-    if (this.props.minLength !== undefined && v.length < this.props.minLength) {
-      throw "Value must be at least " + this.props.minLength + " characters";
-    }
+      if (minLength !== undefined && v.length < minLength) {
+        throw new ValidationError(name, "Value must be at least " + minLength + " characters", this);
+      }
 
-    if (this.props.maxLength !== undefined && v.length > this.props.maxLength) {
-      throw "Value must be less than " + this.props.maxLength + " characters";
-    }
+      if (maxLength !== undefined && v.length > maxLength) {
+        throw new ValidationError(name, "Value must not be more than " + maxLength + " characters", this);
+      }
 
-    return value;
+      resolve(v);
+    });
   }
 
   render() {

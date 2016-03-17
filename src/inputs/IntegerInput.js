@@ -1,27 +1,35 @@
 import React from 'react';
 import TextInput from './TextInput';
+import ValidationError from '../ValidationError';
 
 class IntegerInput extends React.Component {
 
   getValue() {
-    return this.inp.getValue();
+    return this.refs.inp.getValue();
   }
 
   validate(value) {
-    const v = parseInt(this.inp.validate(value), 10);
-    if (v === NaN) {
-      throw "Input must be a numeric integer";
-    }
+    const {name, min, max} = this.props;
+    return this.refs.inp.validate(value).then( (v) => {
+      if (v === undefined) {
+        return;
+      }
 
-    if (this.props.max !== undefined && v > this.props.max) {
-      throw "Input must be less than " + this.props.max;
-    }
+      v = parseInt(value, 10);
+      if (isNaN(v)) {
+        throw new ValidationError(name, "Input must be a numeric integer", this);
+      }
 
-    if (this.props.min !== undefined && v < this.props.min) {
-      throw "Input must be greater than " + this.props.min;
-    }
+      if (max !== undefined && v > max) {
+        throw new ValidationError(name, "Input must be less than " + this.props.max, this);
+      }
 
-    return v;
+      if (min !== undefined && v < min) {
+        throw new ValidationError(name, "Input must be greater than " + this.props.min, this);
+      }
+
+      return v;
+    });
   }
 
   render() {
