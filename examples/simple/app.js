@@ -7,7 +7,7 @@ const modelAttributes = [
   { name: "title", type: "Deferred", label: "Title", required: true, minLength: 3 },
   { name: "sex", type: "Radio", label: "Sex", required: true, options: { male: "Male", female: "Female" }, optionClass: "radio-inline" },
   { name: "sn", type: "Integer", label: "SN", description: "Your Serial Number", max: 999, min: 100 },
-  { name: "dob", type: "Date", label: "Date of Birth", description: "The day you were born", format: "YYYY-MM-DD"},
+  { name: "dob", type: "Date", label: "Date of Birth", description: "The day you were born", format: "YYYY-MM-DD", suffix: "A.D."},
   { name: "hobbies", type: "CheckBox", label: "Hobbies", options: {
       football: "FootBall",
       cricket: "Cricket",
@@ -15,7 +15,8 @@ const modelAttributes = [
       volley: "Volley Ball",
       swim: "Swimming",
       horse: "Horse Riding"
-    }, minSelection: 2, maxSelection: 4, optionClass: "col-md-4 checkbox"}
+    }, minSelection: 2, maxSelection: 4, optionClass: "col-md-4 checkbox"},
+  { name: "description", type: "TextArea", label: "Description" }
 ];
 
 

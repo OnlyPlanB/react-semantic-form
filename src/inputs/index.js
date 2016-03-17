@@ -4,3 +4,4 @@ export DeferredInput from './DeferredInput';
 export RadioInput from './RadioInput';
 export CheckBoxInput from './CheckBoxInput';
 export DateInput from './DateInput';
+export TextAreaInput from './TextAreaInput';
