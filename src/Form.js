@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Fieldset from './Fieldset';
+import * as Inputs from './inputs';
 
 class Form extends React.Component {
   constructor(props, context) {
@@ -9,7 +10,9 @@ class Form extends React.Component {
     // populated through the context by the the child inputs
     this.inputs = {};
 
-    this.state.preset = this.props.preset;
+    this.state = {
+      preset: this.props.preset
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -24,7 +27,9 @@ class Form extends React.Component {
     }
   }
 
-  /* Get all the values of the input elements in the form "async" */
+  /** Get all the values of the input elements in the form "asyncronously"
+   * and also validates the value in the process
+   */
   serialize() {
     return new Promise((resolve, reject) => {
       const res = {};
@@ -32,35 +37,62 @@ class Form extends React.Component {
       const promises = [];
       Object.assign(res, this.state.preset);
       for(let inp in this.inputs) {
-        const v = inputs[inp].getValue();
+        const inpElement = inputs[inp];
+        let v = inpElement.getValue();
         if (v instanceof Promise) {
           promiseNames.push(inp);
           promises.push(v);
         } else {
-          res[inp] = v;
+          // validate the value
+          try {
+            v = inpElement.validate(v);
+            if (v !== null) {
+              res[inp] = v;
+            }
+          } catch(err) {
+            this.state.error = true;
+            this.state.errors[inp] = error;
+          }
         }
       }
 
       if (promises.length == 0) {
-        return resolve(res);
+        if (this.state.error === true) {
+          reject("Validation Error");
+        } else {
+          resolve(res);
+        }
       }
       // If there are any promises wait for the promises to complete
       return Promise.all(promises).then( (values) => {
         for(let i of promiseNames) {
-          res[promiseNames[i]] = values[i]
+          const inpElement = inputs[promiseNames[i]];
+          try {
+            const v = inpElement.validate(values[i]);
+            if (v !== null) {
+              res[promiseNames[i]] = v;
+            }
+          } catch(err) {
+            this.state.error = true;
+            this.state.errors[inp] = err;
+          }
         }
-        resolve(res);
+        if (this.state.error === true) {
+          reject("Validation Error");
+        } else {
+          resolve(res);
+        }
       })
     });
   }
 
   render() {
-    const { children } = this.props;
+    let { children } = this.props;
     if (!children) {
-      children = Form.generate(props.attributes);
+      children = Form.generate(this.props.attributes);
     }
     return (
-      <form onSubmit={this._onSubmit.bind(this)}>
+      <form className="form" onSubmit={this._onSubmit.bind(this)}>
         {children}
       </form>
     );
@@ -99,7 +131,11 @@ class Form extends React.Component {
       err: msg,
       errDef: response
     });
-    console.error("Data posting error", msg, response)  
+    console.error("Data posting error", msg, response)
+  }
+
+  getDefaultValue(name) {
+    return this.props.preset && this.props.preset[name];
   }
 
   registerInput(name, element) {
@@ -123,45 +159,11 @@ class Form extends React.Component {
     }
   }
 
-  _defaultBody() {
-
-  }
 }
 
 Form.METHOD_GET = "GET";
 Form.METHOD_POST = "POST";
 
-Form.Fieldset = Fieldset;
-Form.Model = (props) => {
-  const { attributes, ...other } = props;
-  return (
-    <div {...other}>
-      { Form.generate(attributes) }
-    </div>
-  );
-}
-
-Form.ModelInput = (props) => {
-  const { label, description } = props;
-  return (
-    <Form.Fieldset label={label} description={description}>
-      { Form.generateInput(props) }
-    </Form>
-  )
-}
-
-/* A default body generated if one is not provided */
-Form.generate = function(attributes) {
-  const inputs = [];
-  for(let i in attributes) {
-    const attr = attributes[i];
-    inputs.push(
-      <Form.ModelInput key={attr.name} {...attr} />
-    );
-  }
-
-  return inputs;
-}
 
 /** A method provided to make any Form Input compatible with the form.
  * Make sure when you export the form you use this. A connected form
@@ -171,15 +173,15 @@ Form.generate = function(attributes) {
  *
  * Ex: export default Form.connect(ComboBox)
  */
-function connect(Component) {
+Form.connect = function(Component) {
   const FormInput = React.createClass({
     propTypes: {
       name: React.PropTypes.string.isRequired
-    }
+    },
 
     contextTypes: {
       form: React.PropTypes.object
-    }
+    },
 
     componentDidMount() {
       if (!this.refs.input.getValue) {
@@ -188,11 +190,11 @@ function connect(Component) {
       }
 
       this.context.form.registerInput(this.props.name, this);
-    }
+    },
 
     componentWillUnmount() {
       this.context.form.unregisterInput(this.props.name, this);
-    }
+    },
 
     /**
      * This is the method called by the form to get the value.
@@ -201,7 +203,11 @@ function connect(Component) {
      */
     getValue() {
       return this.refs.input.getValue();
-    }
+    },
+
+    validate() {
+      return this.refs.input.validate();
+    },
 
     render() {
       /* get the default value and provide it to the underlying component */
@@ -215,6 +221,70 @@ function connect(Component) {
   return FormInput;
 }
 
+
+
+Form.Fieldset = Fieldset;
+Form.DefaultInput = Form.connect(Inputs.TextInput);
+
+Form.Inputs = {};
+for(let n in Inputs) {
+  const inp = Inputs[n];
+  if (n.endsWith("Input")) {
+    n = n.substring(0, n.length-5);
+  }
+  Form.Inputs[n] = Form.connect(inp);
+}
+
+Form.Input = (props) => {
+  const { type, label, description, prefix, suffix } = props;
+  const Input = Form.Inputs.hasOwnProperty(type) ? Form.Inputs[type] : Form.DefaultInput;
+
+  let inputElement = <Input className="form-control" {...props} />;
+
+  // Attach a prefix or suffix if its provided
+  if (prefix || suffix) {
+    inputElement = (
+      <div className="input-group">
+        { prefix && <div className="input-group-addon">{prefix}</div> }
+        { inputElement }
+        { suffix && <div className="input-group-addon">{suffix}</div> }
+      </div>
+    )
+  }
+
+  // If there's a label or description create a form group and put it there
+  if (label || description) {
+    return (
+      <Form.Fieldset label={label} description={description}>
+      {inputElement}
+      </Form.Fieldset>
+    );
+  }
+  console.log("InputElement is", inputElement);
+  return inputElement;
+}
+
+Form.Model = (props) => {
+  const { attributes, ...other } = props;
+  return (
+    <div {...other}>
+      { Form.generate(attributes) }
+    </div>
+  );
+}
+
+/* A default body generated if one is not provided */
+Form.generate = function(attributes) {
+  const inputs = [];
+  for(let i in attributes) {
+    const attr = attributes[i];
+    inputs.push(
+      <Form.Input key={attr.name} {...attr} />
+    );
+  }
+
+  return inputs;
+}
 Form.childContextTypes = {
   form: PropTypes.object
 }
@@ -222,7 +292,7 @@ Form.childContextTypes = {
 Form.propTypes = {
   action: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   method: PropTypes.oneOf([Form.METHOD_GET, Form.METHOD_POST]),
-  attributes: PropTypes.object.isRequired,
+  attributes: PropTypes.array.isRequired,
 
   onSubmit: PropTypes.func,
   onSubmitted: PropTypes.func,

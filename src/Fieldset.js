@@ -2,7 +2,7 @@ import React from 'react';
 
 const Fieldset = (props) => {
 
-  const { label, description } = props;
+  const { id, label, description } = props;
 
   return (
     <div className="form-group row">
