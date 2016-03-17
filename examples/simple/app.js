@@ -15,7 +15,8 @@ const modelAttributes = [
       volley: "Volley Ball",
       swim: "Swimming",
       horse: "Horse Riding"
-    }, minSelection: 2, maxSelection: 4, optionClass: "col-md-4 checkbox"}
+    }, minSelection: 2, maxSelection: 4, optionClass: "col-md-4 checkbox"},
+  { name: "description", type: "TextArea", label: "Description" }
 ];
 
 
