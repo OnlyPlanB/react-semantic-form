@@ -17,7 +17,7 @@ class RadioInput extends React.Component {
   }
 
   validate(value) {
-    const { name, required, optionClass } = this.props;
+    const { name, required } = this.props;
     return new Promise( (resolve, reject) => {
       if (required && value === undefined) {
         throw new ValidationError(name, "One of the option needs to be selected");
