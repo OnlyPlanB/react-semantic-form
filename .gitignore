@@ -1,2 +1,6 @@
 node_modules
 .DS_STORE
+
+# Ignore the build directories
+lib/
+es6/
