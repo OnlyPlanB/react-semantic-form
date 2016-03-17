@@ -142,17 +142,22 @@ class Form extends React.Component {
     }
   }
 
+  getError(name) {
+    return typeof this.state.error === "object" && this.state.error[name];
+  }
+
   setError(name, error) {
     const err = typeof this.state.error === "object" ? this.state.error : {};
     if (err[name] !== error) {
       err[name] = error;
+      console.log("State errro", name, error);
       this.setState({
         error: err
       })
     }
   }
 
-  clearError(name, error) {
+  clearError(name) {
     if (typeof this.state.error === "object") {
       if (this.state.error.hasOwnProperty(name)) {
         delete this.state.error[name];
@@ -181,9 +186,10 @@ for(let n in Inputs) {
   Form.Inputs[n] = connectInput(inp);
 }
 
-Form.Input = (props) => {
-  const { type, label, description, prefix, suffix, error } = props;
+const Input = (props, context) => {
+  const { name, type, label, description, prefix, suffix } = props;
   const Input = Form.Inputs.hasOwnProperty(type) ? Form.Inputs[type] : Form.DefaultInput;
+  const error = context.form.getError(name);
 
   let inputElement = <Input className={"form-control" + (error?" form-control-danger":"")} {...props} />;
 
@@ -201,7 +207,7 @@ Form.Input = (props) => {
   // If there's a label or description create a form group and put it there
   if (label || description) {
     return (
-      <Form.Fieldset label={label} description={description} error={error}>
+      <Form.Fieldset name={name} label={label} description={description}>
       {inputElement}
       </Form.Fieldset>
     );
@@ -209,11 +215,15 @@ Form.Input = (props) => {
   return inputElement;
 }
 
-Form.Model = (props) => {
-  const { attributes, ...other } = props;
+Input.contextTypes = {
+  form: React.PropTypes.object
+}
+
+const ModelInputs = (props) => {
+  const { attributes, error, ...other } = props;
   return (
     <div {...other}>
-      { generate(attributes) }
+      { generate(attributes, typeof error === "object"?error:{}) }
     </div>
   );
 }
@@ -228,12 +238,13 @@ function generate(attributes, errorAttributes) {
       error = errorAttributes[attr.name];
     }
     inputs.push(
-      <Form.Input key={attr.name} {...attr} error={error} />
+      <Input key={attr.name} {...attr} error={error} />
     );
   }
 
   return inputs;
 }
+
 Form.childContextTypes = {
   form: PropTypes.object
 }
@@ -252,5 +263,5 @@ Form.defaultProps = {
   method: Form.METHOD_POST
 }
 
-
+export { Input, ModelInputs };
 export default Form;

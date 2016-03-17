@@ -78,9 +78,10 @@ export default function(Component) {
     render() {
       /* get the default value and provide it to the underlying component */
       const defaultValue = this.context.form.getDefaultValue(this.props.name);
+      const error = this.context.form.getError(this.props.name);
 
       /* Override the defaultValue prop if its provided */
-      return <Component ref="input" {...this.props} defaultValue={defaultValue} onChange={this._onChange} />;
+      return <Component ref="input" {...this.props} defaultValue={defaultValue} onChange={this._onChange} error={error}/>;
     }
   });
 
