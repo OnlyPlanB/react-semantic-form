@@ -4,3 +4,4 @@ node_modules
 # Ignore the build directories
 lib/
 es6/
+umd/

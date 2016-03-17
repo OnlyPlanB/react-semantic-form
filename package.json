@@ -2,7 +2,15 @@
   "name": "react-bootstrap-form",
   "version": "0.1.0",
   "description": "A dynamic form for React styled with bootstrap",
-  "main": "lib/index.js",
+  "main": "lib/index",
+  "files": [
+    "*.md",
+    "docs",
+    "es6",
+    "lib",
+    "modules/*.js",
+    "umd"
+  ],
   "scripts": {
     "build": "npm run build-cjs && npm run build-es6",
     "build-cjs": "rimraf lib && babel ./src -d lib --presets=react,stage-0,es2015 --ignore '__tests__'",
