@@ -4,16 +4,31 @@
   "description": "A dynamic form for React styled with bootstrap",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build-cjs && npm run build-es6",
+    "build-cjs": "rimraf lib && babel ./src -d lib --ignore '__tests__'",
+    "build-es6": "rimraf es6 && babel ./src -d es6 --blacklist=es6.modules --ignore '__tests__'",
+    "build-umd": "NODE_ENV=production webpack src/index.js umd/ReactRouter.js",
+    "build-min": "NODE_ENV=production webpack -p src/index.js umd/ReactRouter.min.js",
+    "lint": "eslint src examples",
+    "start": "node examples/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sharingapples/react-bootstrap-form.git"
   },
-  "author": "",
+  "author": "Ranjan Shrestha",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sharingapples/react-bootstrap-form/issues"
   },
-  "homepage": "https://github.com/sharingapples/react-bootstrap-form#readme"
+  "homepage": "https://github.com/sharingapples/react-bootstrap-form#readme",
+  "dependencies": {
+    "react": "^0.14.7"
+  },
+  "devDependencies": {
+    "babel-core": "^6.7.2",
+    "babel-loader": "^6.2.4",
+    "webpack": "^1.12.14"
+  }
 }
