@@ -1,0 +1,19 @@
+{
+  "name": "react-bootstrap-form",
+  "version": "0.1.0",
+  "description": "A dynamic form for React styled with bootstrap",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharingapples/react-bootstrap-form.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sharingapples/react-bootstrap-form/issues"
+  },
+  "homepage": "https://github.com/sharingapples/react-bootstrap-form#readme"
+}
