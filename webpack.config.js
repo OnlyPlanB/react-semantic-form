@@ -1,8 +1,6 @@
 var webpack = require('webpack');
 
 module.exports = {
-  devtool: 'source-map',
-
   output: {
     library: 'ReactBootstrapForm',
     libraryTarget: 'umd'
@@ -19,7 +17,9 @@ module.exports = {
 
   module: {
     loaders: [
-      { test :/\.js$/, exclude: /node_modules/, loader: 'babel' }
+      { test :/\.js$/, exclude: /node_modules/, loader: 'babel', query: {
+        presets: [ 'react', 'stage-0', 'es2015' ]
+      }}
     ]
   },
 
