@@ -1,8 +1,10 @@
 import React from 'react';
 
-const Fieldset = (props) => {
+const Fieldset = (props, context) => {
 
-  const { id, label, description, error } = props;
+  const { id, name, label, description } = props;
+  const error = context.form.getError(name);
+
 
   return (
     <div className={ "form-group row" + (error ? " has-danger":"")}>
@@ -16,4 +18,7 @@ const Fieldset = (props) => {
   );
 }
 
+Fieldset.contextTypes = {
+  form: React.PropTypes.object
+}
 export default Fieldset;

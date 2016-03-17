@@ -35,6 +35,9 @@ class CheckBoxInput extends React.Component {
       if (required && value.length === 0) {
         throw new ValidationError(name, "One of the value must be selected", this);
       }
+      if(value.length === 0) {
+        resolve(undefined);
+      }
       if (minSelection !== undefined && value.length < minSelection) {
         throw new ValidationError(name, "At least " + minSelection + " options must be selected", this);
       }
@@ -42,7 +45,7 @@ class CheckBoxInput extends React.Component {
         throw new ValidationError(name, "Only upto " + maxSelection + " options can be selected", this);
       }
 
-      resolve(value.length === 0 ? undefined : value);
+      resolve(value);
     });
   }
 
@@ -57,7 +60,7 @@ class CheckBoxInput extends React.Component {
     } else {
       values = texts = [];
     }
-    
+
     return (
       <div>
         { texts.map( (text, index) => (
