@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/sharingapples/react-bootstrap-form#readme",
   "dependencies": {
+    "moment": "^2.12.0",
     "react": "^0.14.7"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "express": "^4.13.4",
     "express-urlrewrite": "^1.2.0",
     "react-dom": "^0.14.7",
+    "rimraf": "^2.5.2",
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.5.1"
   }
