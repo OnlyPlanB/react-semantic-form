@@ -60,9 +60,9 @@ class Form extends React.Component {
 
   render() {
     let { children } = this.props;
-    const { error } = this.state;
+    const error = this.state.error;
     if (!children) {
-      children = generate(this.props.attributes, typeof error === "object" ? error : null);
+      children = generate(this.props.attributes);
       children.push(
         <Form.Fieldset key="form__submit__" label="">
           <button className="btn btn-sm btn-primary" type="submit">Save</button>
@@ -220,25 +220,21 @@ Input.contextTypes = {
 }
 
 const ModelInputs = (props) => {
-  const { attributes, error, ...other } = props;
+  const { attributes, ...other } = props;
   return (
     <div {...other}>
-      { generate(attributes, typeof error === "object"?error:{}) }
+      { generate(attributes) }
     </div>
   );
 }
 
 /* Generate a form for the model */
-function generate(attributes, errorAttributes) {
+function generate(attributes) {
   const inputs = [];
   for(let i in attributes) {
     const attr = attributes[i];
-    let error = undefined;
-    if (errorAttributes && errorAttributes.hasOwnProperty(attr.name)) {
-      error = errorAttributes[attr.name];
-    }
     inputs.push(
-      <Input key={attr.name} {...attr} error={error} />
+      <Input key={attr.name} {...attr} />
     );
   }
 
