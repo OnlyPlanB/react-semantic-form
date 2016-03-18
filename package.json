@@ -1,6 +1,6 @@
 {
   "name": "react-bootstrap-form",
-  "version": "0.1.3",
+  "version": "0.1.4-beta0",
   "description": "A dynamic form for React styled with bootstrap",
   "main": "lib/index",
   "files": [
