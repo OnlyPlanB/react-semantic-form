@@ -27,7 +27,7 @@ var ValidationError = require('react-bootstrap-form').ValidationError;
 ``` javascript
 import React from 'react';
 import { render } from 'react-dom';
-import Form from 'form';
+import Form from 'react-bootstrap-form';
 
 // Define your form attributes
 const attributes = [

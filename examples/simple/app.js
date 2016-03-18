@@ -16,6 +16,12 @@ const modelAttributes = [
       swim: "Swimming",
       horse: "Horse Riding"
     }, minSelection: 2, maxSelection: 4, optionClass: "col-md-4 checkbox"},
+  { name: "select", type: "Select", label: "Select One", options : {
+    "": "Select One Option",
+    "one": "Option 1",
+    "two": "Option 2",
+    "three": "Option 3"
+  }, required: true},
   { name: "description", type: "TextArea", label: "Description" }
 ];
 
