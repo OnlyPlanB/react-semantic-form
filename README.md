@@ -52,26 +52,29 @@ it could be
 ```
 
 **Customizing the Form**  
-Alternatively you can use `Form.Input` to define a input and `Form.Fieldset`
+Alternatively you can use `Input` to define a input and `Fieldset`
 for other input elements. The Form connects with only specially built
-input components like `TextInput`,`DateInput`, `RadioInput`, etc which are  mapped with `type` prop in the `Form.Input`. Check out the documentation to
+input components like `TextInput`,`DateInput`, `RadioInput`, etc which are  
+mapped with `type` prop in the `Input`. Check out the documentation to
 find out how to build your own components that connects with the Form
 automatically.
 
 ```javascript
-  render() {
-    return (
-      <Form>
-        <Form.Input type="Text" name="username" label="Username"
-              required=true />,
-        <Form.Input type="Date" name="dob" label="Date of Birth"
-              required=true />
-        <Form.Input type="TextArea" name="description" label="Description" />
+  import React from 'react';
+  import { render } from 'react-dom';
+  import Form, { Input, Fieldset } from 'react-bootstrap-form';
 
-        <Form.Fieldset label="">
+  render(
+      <Form>
+        <Input type="Text" name="username" label="Username"
+              required=true />,
+        <Input type="Date" name="dob" label="Date of Birth"
+              required=true />
+        <Input type="TextArea" name="description" label="Description" />
+
+        <Fieldset label="">
           <button className="btn btn-primary" type="submit">Post</button>
-        </Form.Fieldset>
+        </Fieldset>
       </Form>
-    );
-  }
+  ,document.body);
 ```

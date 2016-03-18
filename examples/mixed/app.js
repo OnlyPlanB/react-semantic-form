@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Form from 'react-bootstrap-form';
+import Form, { Model, Input, Fieldset } from 'react-bootstrap-form';
 
 const modelAttributes = [
   { name: "name", type: "Text", label:"Name", description: "Enter your name", required: true },
@@ -26,7 +26,13 @@ class App extends React.Component {
     return (
       <div className="row">
         <div className="col-md-offset-1 col-md-10">
-          <Form action="" attributes={modelAttributes} suppress={{sex: "female"}}/>
+          <Form action="" attributes={modelAttributes}>
+            <Model />
+            <Input type="Text" name="additional" label="Additional Input" />
+            <Fieldset label="">
+              <button type="submit" className="btn btn-secondary">Submit</button>
+            </Fieldset>
+          </Form>
         </div>
       </div>
     );

@@ -3,6 +3,7 @@ import Fieldset from './Fieldset';
 import * as Inputs from './inputs';
 import connectInput from './connectInput';
 import ValidationError from './ValidationError';
+import Input from './Input';
 
 class Form extends React.Component {
   constructor(props, context) {
@@ -13,14 +14,14 @@ class Form extends React.Component {
     this.inputs = {};
 
     this.state = {
-      preset: this.props.preset,
+      preset: Object.assign({}, this.props.preset, this.props.suppress),
       error: false
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      preset: nextProps.preset
+      preset: Object.assign({}, nextProps.preset, nextProps.suppress)
     });
   }
 
@@ -62,7 +63,7 @@ class Form extends React.Component {
     let { children } = this.props;
     const error = this.state.error;
     if (!children) {
-      children = generate(this.props.attributes);
+      children = generate(this.props.attributes, this.props.suppress);
       children.push(
         <Form.Fieldset key="form__submit__" label="">
           <button className="btn btn-sm btn-primary" type="submit">Save</button>
@@ -186,53 +187,25 @@ for(let n in Inputs) {
   Form.Inputs[n] = connectInput(inp);
 }
 
-const Input = (props, context) => {
-  const { name, type, label, description, prefix, suffix } = props;
-  const Input = Form.Inputs.hasOwnProperty(type) ? Form.Inputs[type] : Form.DefaultInput;
-  const error = context.form.getError(name);
+const Model = (props, context) => (
+  <div {...props}>
+    { generate(context.form.props.attributes, context.form.props.suppress) }
+  </div>
+);
 
-  let inputElement = <Input className={"form-control" + (error?" form-control-danger":"")} {...props} />;
-
-  // Attach a prefix or suffix if its provided
-  if (prefix || suffix) {
-    inputElement = (
-      <div className="input-group">
-        { prefix && <div className="input-group-addon">{prefix}</div> }
-        { inputElement }
-        { suffix && <div className="input-group-addon">{suffix}</div> }
-      </div>
-    )
-  }
-
-  // If there's a label or description create a form group and put it there
-  if (label || description) {
-    return (
-      <Form.Fieldset name={name} label={label} description={description}>
-      {inputElement}
-      </Form.Fieldset>
-    );
-  }
-  return inputElement;
-}
-
-Input.contextTypes = {
-  form: React.PropTypes.object
-}
-
-const ModelInputs = (props) => {
-  const { attributes, ...other } = props;
-  return (
-    <div {...other}>
-      { generate(attributes) }
-    </div>
-  );
+Model.contextTypes = {
+  form: PropTypes.object
 }
 
 /* Generate a form for the model */
-function generate(attributes) {
+function generate(attributes, suppress) {
   const inputs = [];
   for(let i in attributes) {
     const attr = attributes[i];
+    if (suppress && suppress.hasOwnProperty(attr.name)) {
+      continue;
+    }
+
     inputs.push(
       <Input key={attr.name} {...attr} />
     );
@@ -246,18 +219,24 @@ Form.childContextTypes = {
 }
 
 Form.propTypes = {
-  action: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  method: PropTypes.oneOf([Form.METHOD_GET, Form.METHOD_POST]),
-  attributes: PropTypes.array.isRequired,
+  action: PropTypes.string,       /* The url where the data needs to be posted */
+  method: PropTypes.oneOf([       /* The url posting method */
+      Form.METHOD_GET,
+      Form.METHOD_POST
+    ]),
+  attributes: PropTypes.array,    /* The model attributes that can be automatically generated */
+  preset: PropTypes.object,       /* The values to be used as default values for inputs */
+  suppress: PropTypes.object,     /* The model attributes to be suppressed during automatic generation */
 
-  onSubmit: PropTypes.func,
-  onSubmitted: PropTypes.func,
-  onError: PropTypes.func
+  onSubmit: PropTypes.func,       /* Override default onSubmit. The data posting will not take place. */
+  onValidate: PropTypes.func,     /* A validation method that can validate/change the data before submission. Should throw ValidationError. */
+  onSuccess: PropTypes.func,      /* Callback invoked once the data is submitted successfully to the server */
+  onError: PropTypes.func         /* Callback invoked when the data could not be submitted to the server */
 }
 
 Form.defaultProps = {
   method: Form.METHOD_POST
 }
 
-export { Input, ModelInputs };
+export { Model };
 export default Form;
