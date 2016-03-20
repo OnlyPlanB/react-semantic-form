@@ -88,15 +88,21 @@ class Form extends React.Component {
     this.serialize().then( (res) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, actionUrl);
-      xhr.onLoad = function() {
+      xhr.onload = () => {
+        let response = xhr.response;
+        // Parsing the JSON type data, checking with startsWith, as charset may also be available
+        // TODO: A good content type parser with charsets need to be implemented
+        if (xhr.getResponseHeader('content-type').startsWith("application/json")) {
+          response = JSON.parse(response);
+        }
         if (xhr.status >= 200 && xhr.status < 300) {
-          this.props.onSuccess && this.props.onSuccess(xhr.response);
+          this.props.onSuccess && this.props.onSuccess(response);
         } else if (xhr.status >= 400 && xhr.status < 500) {
-          this._handleError("Invalid server configuration. The resource could not be found.", xhr.response);
+          this._handleError("Invalid server configuration. The resource could not be found.", response);
         } else if (xhr.status >= 500 && xhr.status < 600){
-          this._handleError("Invalid input data", xhr.response);
+          this._handleError("Invalid input data", response);
         } else {
-          this._handleError("Unknown error. Please contact system administrator. " + xhr.status + "::" + xhr.statusText, xhr.response);
+          this._handleError("Unknown error. Please contact system administrator. " + xhr.status + "::" + xhr.statusText, response);
         }
       };
       xhr.onerror = () => this._handleError("Network error", null);

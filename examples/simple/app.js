@@ -33,7 +33,7 @@ class App extends React.Component {
     return (
       <div className="row">
         <div className="col-md-offset-1 col-md-10">
-          <Form action="/" attributes={modelAttributes} suppress={{sex: "female"}}/>
+          <Form action="/" attributes={modelAttributes} suppress={{sex: "female"}} onSuccess={ (res) => console.log(res) }/>
         </div>
       </div>
     );
