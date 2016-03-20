@@ -123,6 +123,12 @@ class Form extends React.Component {
     });
   }
 
+  _handleError(msg, data) {
+    this.setState({
+      error: msg
+    });
+  }
+
   getDefaultValue(name) {
     return this.props.preset && this.props.preset[name];
   }
@@ -188,6 +194,9 @@ for(let n in Inputs) {
   Form.Inputs[n] = connectInput(inp);
 }
 
+// Overide this value to provide a custom input control based on a name
+Form.InputHook = undefined;
+
 const Model = (props, context) => (
   <div {...props}>
     { generate(context.form.props.attributes, context.form.props.suppress) }
@@ -221,7 +230,8 @@ Form.childContextTypes = {
 
 Form.propTypes = {
   action: PropTypes.string,       /* The url where the data needs to be posted */
-
+  method: PropTypes.string,       /* The HTTP method for sending data */
+  
   attributes: PropTypes.array,    /* The model attributes that can be automatically generated */
   preset: PropTypes.object,       /* The values to be used as default values for inputs */
   suppress: PropTypes.object,     /* The model attributes to be suppressed during automatic generation */

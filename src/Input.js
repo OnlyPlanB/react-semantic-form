@@ -3,7 +3,8 @@ import Form from './Form';
 
 const Input = (props, context) => {
   const { name, type, label, description, prefix, suffix } = props;
-  const Input = Form.Inputs.hasOwnProperty(type) ? Form.Inputs[type] : Form.DefaultInput;
+  console.log("Form Input Hook is ", Form.InputHook);
+  const Input = (Form.InputHook && Form.InputHook(type)) || Form.Inputs[type] || Form.DefaultInput;
   const error = context.form.getError(name);
 
   let inputElement = <Input className={"form-control" + (error?" form-control-danger":"")} {...props} />;
