@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-var upload = multer( { dest: 'uploads/' });
+var upload = multer( { dest: '/tmp/react-bootstrap-form/' });
 var rewrite = require('express-urlrewrite');
 var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
