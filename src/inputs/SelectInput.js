@@ -33,14 +33,14 @@ class SelectInput extends React.Component {
   }
 
   validate(value) {
-    const v = value.trim();
+    //const v = value.trim();
     const { name, required } = this.props;
     return new Promise( (resolve, reject) => {
-      if (required && v.length == 0 ) {
+      if ( required && v ) {
         throw new ValidationError(name, "Value is required", this);
       }
 
-      resolve(v.length == 0 ? undefined: v);
+      resolve(v);
     });
   }
 }
