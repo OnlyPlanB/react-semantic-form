@@ -5,3 +5,7 @@ node_modules
 lib/
 es6/
 umd/
+
+# NPM debug log
+npm-debug.log
+
