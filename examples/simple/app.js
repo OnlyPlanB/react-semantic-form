@@ -22,7 +22,8 @@ const modelAttributes = [
     "two": "Option 2",
     "three": "Option 3"
   }, required: true},
-  { name: "description", type: "TextArea", label: "Description" }
+  { name: "description", type: "TextArea", label: "Description" },
+  { name: "file", type: "File", label: "Attach File" }
 ];
 
 
@@ -32,7 +33,7 @@ class App extends React.Component {
     return (
       <div className="row">
         <div className="col-md-offset-1 col-md-10">
-          <Form action="" attributes={modelAttributes} suppress={{sex: "female"}}/>
+          <Form action="/" attributes={modelAttributes} suppress={{sex: "female"}}/>
         </div>
       </div>
     );
