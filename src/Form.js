@@ -83,8 +83,7 @@ class Form extends React.Component {
     e.preventDefault();
 
     const actionUrl = typeof this.props.action === "function" ? this.props.action(props) : this.props.action;
-    const method = this.props.method;
-
+    const method = this.props.preset ? "PUT" : "POST"; // Automatically detect the form post method
     this.serialize().then( (res) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, actionUrl);
@@ -177,10 +176,6 @@ class Form extends React.Component {
 
 }
 
-Form.METHOD_GET = "GET";
-Form.METHOD_POST = "POST";
-
-
 Form.Fieldset = Fieldset;
 Form.DefaultInput = connectInput(Inputs.TextInput);
 
@@ -226,10 +221,7 @@ Form.childContextTypes = {
 
 Form.propTypes = {
   action: PropTypes.string,       /* The url where the data needs to be posted */
-  method: PropTypes.oneOf([       /* The url posting method */
-      Form.METHOD_GET,
-      Form.METHOD_POST
-    ]),
+
   attributes: PropTypes.array,    /* The model attributes that can be automatically generated */
   preset: PropTypes.object,       /* The values to be used as default values for inputs */
   suppress: PropTypes.object,     /* The model attributes to be suppressed during automatic generation */
@@ -238,10 +230,6 @@ Form.propTypes = {
   onValidate: PropTypes.func,     /* A validation method that can validate/change the data before submission. Should throw ValidationError. */
   onSuccess: PropTypes.func,      /* Callback invoked once the data is submitted successfully to the server */
   onError: PropTypes.func         /* Callback invoked when the data could not be submitted to the server */
-}
-
-Form.defaultProps = {
-  method: Form.METHOD_POST
 }
 
 export { Model };
