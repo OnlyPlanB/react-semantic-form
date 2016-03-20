@@ -90,7 +90,7 @@ class Form extends React.Component {
       xhr.open(method, actionUrl);
       xhr.onLoad = function() {
         if (xhr.status >= 200 && xhr.status < 300) {
-          this.onSuccess && this.onSuccess(xhr.response);
+          this.props.onSuccess && this.props.onSuccess(xhr.response);
         } else if (xhr.status >= 400 && xhr.status < 500) {
           this._handleError("Invalid server configuration. The resource could not be found.", xhr.response);
         } else if (xhr.status >= 500 && xhr.status < 600){
