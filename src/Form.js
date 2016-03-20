@@ -83,7 +83,7 @@ class Form extends React.Component {
     e.preventDefault();
 
     const actionUrl = typeof this.props.action === "function" ? this.props.action(props) : this.props.action;
-    const method = this.props.preset ? "PUT" : "POST"; // Automatically detect the form post method
+    const method = this.props.method || (this.props.preset ? "PUT" : "POST"); // Automatically detect the form post method
     this.serialize().then( (res) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, actionUrl);
@@ -231,7 +231,7 @@ Form.childContextTypes = {
 Form.propTypes = {
   action: PropTypes.string,       /* The url where the data needs to be posted */
   method: PropTypes.string,       /* The HTTP method for sending data */
-  
+
   attributes: PropTypes.array,    /* The model attributes that can be automatically generated */
   preset: PropTypes.object,       /* The values to be used as default values for inputs */
   suppress: PropTypes.object,     /* The model attributes to be suppressed during automatic generation */
@@ -241,6 +241,8 @@ Form.propTypes = {
   onSuccess: PropTypes.func,      /* Callback invoked once the data is submitted successfully to the server */
   onError: PropTypes.func         /* Callback invoked when the data could not be submitted to the server */
 }
+
+Form.connect = connectInput;
 
 export { Model };
 export default Form;
