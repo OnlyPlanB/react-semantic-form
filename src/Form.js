@@ -66,16 +66,16 @@ class Form extends React.Component {
       children = generate(this.props.attributes, this.props.suppress);
       children.push(
         <Form.Fieldset key="form__submit__" label="">
-          <button className="btn btn-sm btn-primary" type="submit">Save</button>
+          <button className="btn btn-sm btn-primary" type="submit" onClick={this._onSubmit.bind(this)}>Save</button>
         </Form.Fieldset>
       );
     }
 
     return (
-      <form className="form" onSubmit={this._onSubmit.bind(this)}>
+      <div className="form" onSubmit={this._onSubmit.bind(this)}>
         { typeof error === "string" && <div className=".alert-danger">{error}</div> }
         {children}
-      </form>
+      </div>
     );
   }
 
