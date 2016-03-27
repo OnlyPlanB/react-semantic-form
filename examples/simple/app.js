@@ -8,6 +8,7 @@ const modelAttributes = [
   { name: "sex", type: "Radio", label: "Sex", required: true, options: { male: "Male", female: "Female" }, optionClass: "radio-inline" },
   { name: "sn", type: "Integer", label: "SN", description: "Your Serial Number", max: 999, min: 100 },
   { name: "dob", type: "Date", label: "Date of Birth", description: "The day you were born", format: "YYYY-MM-DD", suffix: "A.D."},
+  { name: "human", type: "Boolean", label: "Is Human", defaultValue: true },
   { name: "hobbies", type: "CheckBox", label: "Hobbies", options: {
       football: "FootBall",
       cricket: "Cricket",

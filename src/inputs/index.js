@@ -7,3 +7,4 @@ export DateInput from './DateInput';
 export TextAreaInput from './TextAreaInput';
 export SelectInput from './SelectInput';
 export FileInput from './FileInput';
+export BooleanInput from './BooleanInput';
