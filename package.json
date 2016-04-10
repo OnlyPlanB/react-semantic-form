@@ -1,7 +1,7 @@
 {
-  "name": "react-bootstrap-form",
+  "name": "react-semantic-form",
   "version": "0.1.0",
-  "description": "A dynamic form for React styled with bootstrap",
+  "description": "A dynamic form for React styled with semantic-ui",
   "main": "lib/index",
   "files": [
     "*.md",
@@ -15,21 +15,21 @@
     "build": "npm run build-cjs && npm run build-es6",
     "build-cjs": "rimraf lib && babel ./src -d lib --presets=react,stage-0,es2015 --ignore '__tests__'",
     "build-es6": "rimraf es6 && babel ./src -d es6 --presets=react,stage-0 --ignore '__tests__'",
-    "build-umd": "NODE_ENV=production webpack src/index.js umd/ReactBootstrapForm.js",
-    "build-min": "NODE_ENV=production webpack -p src/index.js umd/ReactBootstrapForm.min.js",
+    "build-umd": "NODE_ENV=production webpack src/index.js umd/ReactSemanticForm.js",
+    "build-min": "NODE_ENV=production webpack -p src/index.js umd/ReactSemanticForm.min.js",
     "start": "node examples/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sharingapples/react-bootstrap-form.git"
+    "url": "git+https://github.com/sharingapples/react-semantic-form.git"
   },
   "author": "Ranjan Shrestha",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sharingapples/react-bootstrap-form/issues"
+    "url": "https://github.com/sharingapples/react-semantic-form/issues"
   },
-  "homepage": "https://github.com/sharingapples/react-bootstrap-form#readme",
+  "homepage": "https://github.com/sharingapples/react-semantic-form#readme",
   "dependencies": {
     "moment": "^2.12.0",
     "react": "^0.14.7"
