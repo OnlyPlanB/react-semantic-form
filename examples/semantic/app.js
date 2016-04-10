@@ -9,16 +9,15 @@ const modelAttributes = [
   { name: "sn", type: "Integer", label: "SN", description: "Your Serial Number", max: 999, min: 100 },
   { name: "dob", type: "Date", label: "Date of Birth", description: "The day you were born", format: "YYYY-MM-DD", suffix: "A.D."},
   { name: "human", type: "Boolean", label: "Is Human", defaultValue: true },
-  { name: "hobbies", type: "CheckBox", label: "Hobbies", options: {
+  { name: "hobbies", type: "Select", label: "Hobbies", searchable: true, multiple: true, placeholder: "Choose a hobby", options: {
       football: "FootBall",
       cricket: "Cricket",
       basket: "Basket Ball",
       volley: "Volley Ball",
       swim: "Swimming",
       horse: "Horse Riding"
-    }, minSelection: 2, maxSelection: 4, optionClass: "col-md-4 checkbox"},
-  { name: "select", type: "Select", label: "Select One", options : {
-    "": "Select One Option",
+    }, minSelection: 2, maxSelection: 4 },
+  { name: "select", type: "Select", label: "Select One", placeholder: "Options", options : {
     "one": "Option 1",
     "two": "Option 2",
     "three": "Option 3"
@@ -32,10 +31,10 @@ const modelAttributes = [
 class App extends React.Component {
   render() {
     return (
-      <div className="row">
-        <div className="col-md-offset-1 col-md-10">
-          <Form action="/" attributes={modelAttributes} suppress={{sex: "female"}} onSuccess={ (res) => console.log(res) }/>
-        </div>
+      <div className="main ui container">
+
+          <Form name="semantic" attributes={modelAttributes} suppress={{sex: "female"}} onSuccess={ (res) => console.log(res) }/>
+
       </div>
     );
   }
