@@ -1,10 +1,14 @@
 class ValidationError {
-  constructor(name, message, element) {
+  constructor(element, name, message) {
     Object.defineProperties(this, {
       name: { value: name },
       message: { value: message },
       element: { value: element }
     })
+  }
+
+  toString() {
+    return this.message;
   }
 }
 
