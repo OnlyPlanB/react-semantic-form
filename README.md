@@ -1,6 +1,6 @@
-# react-bootstrap-form
+# react-semantic-form
 
-`react-bootstrap-form` is a dynamic form for react with validation and data
+`react-semantic-form` is a dynamic form for react with validation and data
 posting support with customizable input components.
 
 ## Browser support
@@ -9,7 +9,7 @@ Tested in Chrome only at the moment. Please report your issues and we can check.
 ## Installation
 Using npm
 ```
-$ npm install --save react-bootstrap-form
+$ npm install --save react-semantic-form
 ```
 Then with a module bundler like webpack that supports either CommonJS or ES2015
 modules, import the Form:
@@ -18,8 +18,8 @@ modules, import the Form:
 import Form, { ValidationError, TextInput } from 'react-router';
 
 // Not using an ES6 transpiler
-var Form = require('react-bootstrap-form');
-var ValidationError = require('react-bootstrap-form').ValidationError;
+var Form = require('react-semantic-form');
+var ValidationError = require('react-semantic-form').ValidationError;
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ var ValidationError = require('react-bootstrap-form').ValidationError;
 ``` javascript
 import React from 'react';
 import { render } from 'react-dom';
-import Form from 'react-bootstrap-form';
+import Form from 'react-semantic-form';
 
 // Define your form attributes
 const attributes = [
@@ -62,7 +62,7 @@ automatically.
 ```javascript
   import React from 'react';
   import { render } from 'react-dom';
-  import Form, { Input, Fieldset } from 'react-bootstrap-form';
+  import Form, { Input, Fieldset } from 'react-semantic-form';
 
   render(
       <Form>
