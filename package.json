@@ -31,8 +31,7 @@
   },
   "homepage": "https://github.com/sharingapples/react-semantic-form#readme",
   "dependencies": {
-    "moment": "^2.12.0",
-    "react": "^0.14.7"
+    "moment": "^2.12.0"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
@@ -52,5 +51,9 @@
     "rimraf": "^2.5.2",
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.5.1"
+  },
+  "peerDependencies": {
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
   }
 }
